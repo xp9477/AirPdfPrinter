@@ -15,6 +15,7 @@
       <txt-record>product=(Canon PIXMA TS3380)</txt-record>
       <txt-record>printer-state=3</txt-record>
       <txt-record>printer-type=0x82f04c</txt-record>
+      <txt-record>Color=T</txt-record>
       <txt-record>pdl=application/octet-stream,application/pdf,application/postscript,application/vnd.cups-raster,image/gif,image/jpeg,image/png,image/tiff,image/urf,text/html,text/plain,application/vnd.adobe-reader-postscript,application/vnd.cups-command</txt-record>
    </service>
 </service-group>
