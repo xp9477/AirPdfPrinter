@@ -163,3 +163,30 @@ Copyright (c) 2020-2023 Jing Li.  It is released under the [Apache License](http
 ## Attribution
 
 The [AirPrint-PDF.service](https://github.com/thyrlian/AirPdfPrinter/blob/master/AirPrint-PDF.service) static service XML file for Avahi is created via [airprint-generate](https://github.com/tjfontaine/airprint-generate) script.
+
+## 快速文件接收模式
+
+为了提高文件接收和保存的速度，我们提供了一个优化版本，它仅专注于接收文件并直接保存到服务端，不进行额外处理。这种模式适合：
+
+- 需要快速将文件从iOS设备传输到服务器的场景
+- 不需要对PDF文件进行复杂处理的情况
+- 对文件传输速度有较高要求的用户
+
+### 优化说明
+
+1. 简化了PDF处理流程，禁用了后处理但保持高质量输出
+2. 直接将文件保存到固定目录，便于访问
+3. 简化了CUPS配置，减少了不必要的权限检查
+4. 保持PDF的原始质量，确保文档清晰度不降低
+
+### 使用方法
+
+与标准版本相同，但注意以下差异：
+
+- 所有接收的PDF文件会直接保存到容器的`/root/PDF`目录（可通过卷映射访问）
+- 打印机在iOS设备上会显示为"快速文件接收器"
+
+```bash
+# 运行优化版本的容器
+docker run --network=host -d -v $(pwd)/pdf_files:/root/PDF --name air-pdf-receiver air-pdf-printer
+```
