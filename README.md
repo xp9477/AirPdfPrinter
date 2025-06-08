@@ -175,7 +175,7 @@ The [AirPrint-PDF.service](https://github.com/thyrlian/AirPdfPrinter/blob/master
 ### 优化说明
 
 1. 简化了PDF处理流程，禁用了后处理但保持高质量输出
-2. 直接将文件保存到固定目录，便于访问
+2. 直接将文件保存到标准的CUPS-PDF输出目录
 3. 简化了CUPS配置，减少了不必要的权限检查
 4. 保持PDF的原始质量，确保文档清晰度不降低
 
@@ -183,10 +183,9 @@ The [AirPrint-PDF.service](https://github.com/thyrlian/AirPdfPrinter/blob/master
 
 与标准版本相同，但注意以下差异：
 
-- 所有接收的PDF文件会直接保存到容器的`/root/PDF`目录（可通过卷映射访问）
-- 打印机在iOS设备上会显示为"快速文件接收器"
+- PDF文件会保存在容器的标准CUPS-PDF输出目录`/var/spool/cups-pdf`中
 
 ```bash
 # 运行优化版本的容器
-docker run --network=host -d -v $(pwd)/pdf_files:/root/PDF --name air-pdf-receiver air-pdf-printer
+docker run --network=host -d -v $(pwd)/pdf_files:/var/spool/cups-pdf --name air-pdf-receiver xp9477/air-pdf-printer
 ```

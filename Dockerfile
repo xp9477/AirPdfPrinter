@@ -45,8 +45,5 @@ RUN /tmp/config.sh
 # configure AirPrint
 ADD AirPrint-PDF.service /etc/avahi/services/
 
-# create a volume for receiving PDF files
-VOLUME ["/root/PDF"]
-
 # launch CUPS print server
 CMD service cups start && service avahi-daemon start && tail -f /dev/null
