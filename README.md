@@ -1,6 +1,6 @@
 # AirPdfPrinter
 
-![headline](assets/AirPdfPrinter.png)
+![headline](assets/design/AirPdfPrinter.png)
 
 [![Docker Hub](https://img.shields.io/badge/Docker%20Hub-info-blue.svg)](https://hub.docker.com/r/thyrlian/air-pdf-printer)
 
@@ -148,13 +148,13 @@ To enable [AirPrint](https://support.apple.com/en-us/HT201311) of a printer, bel
     * **Name**: [*YourCall*]
     * **Use**: `Generic PostScript Printer`
 
-    <a href="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/Add%20Printer%20-%20macOS.png" target="_blank"><img src="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/Add%20Printer%20-%20macOS.png" width="600"></a>
+    <a href="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/screenshots/Add%20Printer%20-%20macOS.png" target="_blank"><img src="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/screenshots/Add%20Printer%20-%20macOS.png" width="600"></a>
 
   * **iOS**
 
-    <a href="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/Add%20Printer%20-%20iOS%20-%201.png" target="_blank"><img src="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/Add%20Printer%20-%20iOS%20-%201.png" width="250"></a>
-    <a href="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/Add%20Printer%20-%20iOS%20-%202.png" target="_blank"><img src="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/Add%20Printer%20-%20iOS%20-%202.png" width="250"></a>
-    <a href="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/Add%20Printer%20-%20iOS%20-%203.png" target="_blank"><img src="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/Add%20Printer%20-%20iOS%20-%203.png" width="250"></a>
+    <a href="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/screenshots/Add%20Printer%20-%20iOS%20-%201.png" target="_blank"><img src="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/screenshots/Add%20Printer%20-%20iOS%20-%201.png" width="250"></a>
+    <a href="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/screenshots/Add%20Printer%20-%20iOS%20-%202.png" target="_blank"><img src="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/screenshots/Add%20Printer%20-%20iOS%20-%202.png" width="250"></a>
+    <a href="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/screenshots/Add%20Printer%20-%20iOS%20-%203.png" target="_blank"><img src="https://github.com/thyrlian/AirPdfPrinter/blob/master/assets/screenshots/Add%20Printer%20-%20iOS%20-%203.png" width="250"></a>
 
 ## License
 
