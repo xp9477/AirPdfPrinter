@@ -49,5 +49,6 @@ RUN apk add --no-cache avahi && \
     echo "image/urf application/pdf 100 pdftoraster" > /usr/share/cups/mime/airprint.convs && \
     sed -i "s/.*enable-dbus=.*/enable-dbus=no/g" /etc/avahi/avahi-daemon.conf
 
-# Start CUPS, await readiness, then launch Avahi for AirPrint discovery
-CMD ["/bin/sh", "-c", "cupsd && while ! lpstat -r 2>/dev/null | grep -q 'running'; do sleep 1; done && avahi-daemon -D && tail -f /dev/null"]
+ADD --chmod=0755 start.sh /usr/local/bin/
+ADD --chmod=0755 stop.sh /usr/local/bin/
+CMD ["sh", "-c", "start.sh && tail -f /dev/null"]
