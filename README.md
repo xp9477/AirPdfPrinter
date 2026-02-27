@@ -53,6 +53,9 @@ To enable [AirPrint](https://support.apple.com/en-us/HT201311) of a printer, bel
 
     # Build for multiple platforms and push to a registry
     docker buildx build --platform linux/amd64,linux/arm64 -t thyrlian/air-pdf-printer:latest --push .
+
+    # If cross-platform build fails with "exec format error", register QEMU emulators first
+    docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
     ```
 
   * **Network**: With the option `--network=host` set, the container will use the Docker host network stack.  When using host network mode, it would discard published ports, thus we don't need to publish any port with the `run` command (e.g.: `-p 631:631 -p 5353:5353/udp`).  And in this way, we don't require [dbus](https://www.freedesktop.org/wiki/Software/dbus/) (a simple interprocess messaging system) package in the container.  However, the `dbus` service is still needed on the host machine (to check its status, you can run for example `systemctl status dbus` on Ubuntu), and even it is deactivated, it would be automatically triggered to active when `avahi-daemon` starts running.  For more information about Docker's network, please check [here](https://docs.docker.com/engine/reference/run/#network-settings) and [here](https://docs.docker.com/network/host/).  Please be aware, the host networking driver only works on Linux hosts, and is not supported on Docker Desktop for Mac, Docker Desktop for Windows, as stated [here](https://docs.docker.com/network/network-tutorial-host/#prerequisites).
