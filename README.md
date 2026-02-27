@@ -4,7 +4,7 @@
 
 [![Docker Hub](https://img.shields.io/badge/Docker%20Hub-info-blue.svg)](https://hub.docker.com/r/thyrlian/air-pdf-printer)
 
-You wanna print or save something as PDF on your iOS device?  Especially keeping those texts as they are, instead of being images.  Well, Apple's iDevices don't come with such a feature by default, but don't worry, we provide you a neat solution here - a virtual PDF AirPrint printer!
+Wanna print or save something as a PDF from your iOS device, keeping the actual text rather than just images?  Apple devices don't offer this natively, but don't worry, we've got you covered with a virtual PDF AirPrint printer.  While designed for AirPrint, it also works as a standard IPP printer discoverable by any device on the network.
 
 ## Philosophy
 
@@ -31,36 +31,36 @@ To enable [AirPrint](https://support.apple.com/en-us/HT201311) of a printer, bel
   docker pull thyrlian/air-pdf-printer
   ```
 
-  The default admin username is `root`, and the default admin password is [here](https://github.com/thyrlian/AirPdfPrinter/blob/master/Dockerfile#L23).
+  The default admin username is `root`, and the default admin password is [here](https://github.com/thyrlian/AirPdfPrinter/blob/master/Dockerfile#L29).
 
 * **Run**
 
   ```bash
   # Run a container with interactive shell (you'll have to start CUPS print server on your own)
-  docker run --network=host -it -v $(pwd)/pdf:/root/PDF -v $(pwd)/cups-pdf:/var/spool/cups-pdf --name air-pdf-printer air-pdf-printer /bin/bash
+  docker run --network=host -it -v $(pwd)/cups-pdf:/var/spool/cups-pdf --name air-pdf-printer air-pdf-printer /bin/sh
 
   # Run a container in the background
-  docker run --network=host -d -v $(pwd)/pdf:/root/PDF -v $(pwd)/cups-pdf:/var/spool/cups-pdf --name air-pdf-printer air-pdf-printer
+  docker run --network=host -d -v $(pwd)/cups-pdf:/var/spool/cups-pdf --name air-pdf-printer air-pdf-printer
   ```
 
 * **Notes**
 
-  * **Multi-Arch**: This Docker container would also work on ARM-based computer, you just need to build the Docker image properly.  Here I'm not gonna talk about Docker's experimental feature `buildx` for multiple architectures support, you can find more information [here](https://docs.docker.com/buildx/working-with-buildx/) and [here](https://docs.docker.com/docker-for-mac/multi-arch/) on your own.  In order to build for the appropriate CPU architecture, we can simply use the right base image in the Dockerfile.
+  * **Multi-Arch**: The Alpine image provides [multi-arch](https://github.com/docker-library/official-images#architectures-other-than-amd64) manifests (amd64, arm64v8, arm32v7, etc.).  Combined with `buildx`, you can build this image for different architectures.  Note: `--load` only works with a single platform.  Multi-platform builds require `--push` to a registry to generate a proper multi-arch manifest.
 
     ```bash
-    # Change base image to ARMv7 architecture
-    sed -i.bak "s/FROM ubuntu:/FROM arm32v7\/ubuntu:/" Dockerfile && rm Dockerfile.bak
+    # Build for a single platform and load into local Docker
+    docker buildx build --platform linux/arm64 -t air-pdf-printer:arm64 --load .
 
-    # Change base image to x86_64 architecture
-    sed -i.bak "s/FROM arm32v7\/ubuntu:/FROM ubuntu:/" Dockerfile && rm Dockerfile.bak
+    # Build for multiple platforms and push to a registry
+    docker buildx build --platform linux/amd64,linux/arm64 -t thyrlian/air-pdf-printer:latest --push .
     ```
 
   * **Network**: With the option `--network=host` set, the container will use the Docker host network stack.  When using host network mode, it would discard published ports, thus we don't need to publish any port with the `run` command (e.g.: `-p 631:631 -p 5353:5353/udp`).  And in this way, we don't require [dbus](https://www.freedesktop.org/wiki/Software/dbus/) (a simple interprocess messaging system) package in the container.  However, the `dbus` service is still needed on the host machine (to check its status, you can run for example `systemctl status dbus` on Ubuntu), and even it is deactivated, it would be automatically triggered to active when `avahi-daemon` starts running.  For more information about Docker's network, please check [here](https://docs.docker.com/engine/reference/run/#network-settings) and [here](https://docs.docker.com/network/host/).  Please be aware, the host networking driver only works on Linux hosts, and is not supported on Docker Desktop for Mac, Docker Desktop for Windows, as stated [here](https://docs.docker.com/network/network-tutorial-host/#prerequisites).
 
-      * **Port conflict**: in case any required port on the host machine is already in use, Docker will fail to bind the container port to the host port, when this happens, you'll find a line in `/var/log/cups/error_log`: `Unable to open listen socket for address 0.0.0.0:631 - Address already in use`.  To debug and fix it:
+      * **Port conflict**: in case any required port on the host machine is already in use, Docker will fail to bind the container port to the host port, when this happens, you'll find a line in `/var/log/cups/error_log`: `Unable to open listen socket for address 0.0.0.0:631 - Address already in use`.  To debug and fix it (on the **host** machine):
 
         ```bash
-        # Check ports in use on the host machine
+        # Check ports in use
         sudo lsof -i -P -n | grep LISTEN
         # Check if a specific port is in use on the host machine (e.g. port 631)
         sudo lsof -i:631
@@ -96,17 +96,20 @@ To enable [AirPrint](https://support.apple.com/en-us/HT201311) of a printer, bel
 * **Commands**
 
   ```bash
-  # Run all init scripts, in alphabetical order, with the status command
-  service --status-all
-
-  # List units that systemd currently has in memory, with specified type and state
-  systemctl list-units --type=service --state=active
+  # Check CUPS and Avahi service status
+  ps aux | grep -E "cups|avahi"
 
   # Start CUPS service
-  service cups start
+  cupsd
 
   # Start Avahi mDNS/DNS-SD daemon
-  service avahi-daemon start
+  avahi-daemon -D
+
+  # Start all printing services (helper script that handles service orchestration)
+  start.sh
+
+  # Stop all printing services
+  stop.sh
 
   # Shows the server hostname and port.
   lpstat -H
