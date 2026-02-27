@@ -31,14 +31,14 @@ RUN mv /etc/cups/cupsd.conf /etc/cups/cupsd.conf.bak && \
     chmod a-w /etc/cups/cupsd.conf.bak && \
     addgroup root lpadmin && \
     echo -e "${ADMIN_PASSWORD}\n${ADMIN_PASSWORD}" | passwd root
-ADD cupsd.conf /etc/cups/
+ADD conf/cupsd.conf /etc/cups/
 
 # Setup PDF printer
-ADD --chmod=0755 config.sh /tmp/
+ADD --chmod=0755 scripts/config.sh /tmp/
 RUN /tmp/config.sh
 
 # Configure AirPrint
-ADD AirPrint-PDF.service /etc/avahi/services/
+ADD conf/AirPrint-PDF.service /etc/avahi/services/
 
 # Advertise AirPrint via Bonjour broadcast
 RUN apk add --no-cache avahi && \
@@ -49,6 +49,6 @@ RUN apk add --no-cache avahi && \
     echo "image/urf application/pdf 100 pdftoraster" > /usr/share/cups/mime/airprint.convs && \
     sed -i "s/.*enable-dbus=.*/enable-dbus=no/g" /etc/avahi/avahi-daemon.conf
 
-ADD --chmod=0755 start.sh /usr/local/bin/
-ADD --chmod=0755 stop.sh /usr/local/bin/
+ADD --chmod=0755 scripts/start.sh /usr/local/bin/
+ADD --chmod=0755 scripts/stop.sh /usr/local/bin/
 CMD ["sh", "-c", "start.sh && tail -f /dev/null"]
