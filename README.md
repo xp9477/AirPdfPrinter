@@ -96,6 +96,20 @@ To enable [AirPrint](https://support.apple.com/en-us/HT201311) of a printer, bel
 
   * Start Avahi daemon with verbose debug level: `avahi-daemon --debug`
 
+  * Log streaming: By default, the container runs silently without streaming any logs (to reduce noise and give you full control).  To follow the logs in real time, override the default command:
+
+    * Via docker run
+
+    ```bash
+    docker run --network=host -d -v $(pwd)/cups-pdf:/var/spool/cups-pdf --name air-pdf-printer air-pdf-printer sh -c "start.sh && touch /var/log/cups/cups-pdf-PDF_log && tail -f /var/log/cups/error_log /var/log/cups/cups-pdf-PDF_log"
+    ```
+
+    * Via Docker Compose
+
+    ```yaml
+    command: sh -c "start.sh && touch /var/log/cups/cups-pdf-PDF_log && tail -f /var/log/cups/error_log /var/log/cups/cups-pdf-PDF_log"
+    ```
+
 * **Commands**
 
   ```bash
